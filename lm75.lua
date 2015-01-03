@@ -25,7 +25,7 @@ lm75 = {
 
 	convert = function (self, msb, lsb)
 		if msb > 127 then msb = msb - 255 end
-		return msb, bit.rshift(lsb, 5)
+		return msb, bit.band(bit.rshift(lsb, 5), 7)
 	end,
 
 	strTemp = function (self)
