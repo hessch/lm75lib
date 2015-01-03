@@ -23,17 +23,20 @@ lm75 = {
 		return c
 	end,
 
+	convert = function (self, msb, lsb)
+		if msb > 127 then msb = msb - 255 end
+		return msb, bit.rshift(lsb, 5)
+	end,
+
 	strTemp = function (self)
-		local h,l 
-		h,l = string.byte(self:read(), 1, 2)
-		if l>127 then l=5 else l=0 end
-		return string.format("%d.%d", h,l)
+		local h, l 
+		h, l = string.byte(self:read(), 1, 2)
+		return string.format("%d.%d", self:convert(h, l))
 	end,
 
 	intTemp = function (self)
-		local h,l 
-		h,l = string.byte(self:read(), 1, 2)
-		if l>127 then l=5 else l=0 end
-		return tonumber(string.format("%d%d", h,l))
+		local h, l 
+		h, l = string.byte(self:read(), 1, 2)
+		return tonumber(string.format("%d%d", self:convert(h, l)))
 	end
 }
